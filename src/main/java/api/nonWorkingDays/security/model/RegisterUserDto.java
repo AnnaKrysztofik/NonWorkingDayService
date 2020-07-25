@@ -5,6 +5,6 @@ import lombok.Value;
 @Value
 public class RegisterUserDto {
 
-    private String email;
-    private String password;
+    String email;
+    String password;
 }

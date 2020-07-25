@@ -1,6 +1,6 @@
 package api.nonWorkingDays.security;
 
-import api.nonWorkingDays.security.model.LoginCredentials;
+import api.nonWorkingDays.security.model.LoginRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -30,7 +30,7 @@ public class JsonObjectAuthenticationFilter extends UsernamePasswordAuthenticati
             while ((line = reader.readLine()) != null) {
                 sb.append(line);
             }
-            LoginCredentials authRequest = objectMapper.readValue(sb.toString(), LoginCredentials.class);
+            LoginRequest authRequest = objectMapper.readValue(sb.toString(), LoginRequest.class);
             UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                     authRequest.getUsername(), authRequest.getPassword());
 
