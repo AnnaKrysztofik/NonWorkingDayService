@@ -1,5 +1,6 @@
 package api.nonWorkingDays.security.service;
 
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,15 +12,18 @@ import api.nonWorkingDays.security.model.RegisterUserDto;
 import api.nonWorkingDays.security.repo.AppUserRepo;
 import api.nonWorkingDays.security.repo.TokenRepo;
 import javax.mail.MessagingException;
+
 import java.util.UUID;
 
 @Service
+@Slf4j
 public class UserService {
 
     private TokenRepo tokenRepo;
     private MailService mailService;
     private AppUserRepo appUserRepo;
  //   private PasswordEncoder passwordEncoder;
+
 
     public UserService(AppUserRepo appUserRepo, /*PasswordEncoder passwordEncoder,*/ TokenRepo tokenRepo, MailService mailService) {
         this.appUserRepo = appUserRepo;
@@ -70,8 +74,14 @@ public class UserService {
         val byValue = tokenRepo.findByValue(value);
         val appUser = appUserRepo.findById(byValue.getUserId());
 
-        if (appUser.isEmpty())
+        log.info("Enabled user request with value {}",  value);
+
+        if (appUser.isEmpty()) {
+            log.warn("Can't find user");
             return;
+        }
+
+        log.info("User found {}", appUser.get().getUsername());
 
         appUser.get().setEnabled(true);
 

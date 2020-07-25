@@ -12,7 +12,7 @@ import javax.persistence.Id;
 public class AppUser {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+   // @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
     private String username;
