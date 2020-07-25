@@ -10,21 +10,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class LoginController {
-    private UserService userService;
-
-    public LoginController(UserService userService) {
-        this.userService = userService;
-    }
-
-//    @PostMapping("/login")
-//    public void login(@RequestBody LoginCredentials credentials) {
-
+//    private UserService userService;
+//
+//   public LoginController(UserService userService) {
+//        this.userService = userService;
+//    }
 
     @PostMapping("/login")
-    public LoginResponseDto login(@RequestBody LoginCredentials credentials) {
-        if(!userService.canUserLogin(MapperForUsers.map(credentials)))
-            return new LoginResponseDto(false, "Logowanie nie powiodlo sie");
+    public void login(@RequestBody LoginCredentials credentials) {
 
-        return new LoginResponseDto(true, "Witaj!");
+
+//    @PostMapping("/login")
+//    public LoginResponseDto login(@RequestBody LoginCredentials credentials) {
+//        if(!userService.canUserLogin(MapperForUsers.map(credentials)))
+//            return new LoginResponseDto(false, "Logowanie nie powiodlo sie");
+//
+//        return new LoginResponseDto(true, "Witaj!");
     }
 }

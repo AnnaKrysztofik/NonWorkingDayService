@@ -42,25 +42,25 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final String secret;
     private final DataSource dataSource;
     private final ObjectMapper objectMapper;
+//
+//    private UserDetailsServiceImpl userDetailsService;
+//    private AppUserRepo appUserRepo;
 
-    private UserDetailsServiceImpl userDetailsService;
-    private AppUserRepo appUserRepo;
-
-
-    @Bean
-    public PasswordEncoder getPasswordEncoder(){
-        return  new BCryptPasswordEncoder();
-    }
+//
+//    @Bean
+//    public PasswordEncoder getPasswordEncoder(){
+//        return  new BCryptPasswordEncoder();
+//    }
 
 
     public WebSecurityConfig(RestAuthenticationSuccessHandler authenticationSuccessHandler,
                              RestAuthenticationFailureHandler authenticationFailureHandler,
                              @Value("${jwt.secret}") String secret,
                              ObjectMapper objectMapper,
-                             DataSource dataSource,
+                             DataSource dataSource
 
-                             UserDetailsServiceImpl userDetailsService,
-                             AppUserRepo appUserRepo
+//                             UserDetailsServiceImpl userDetailsService,
+//                             AppUserRepo appUserRepo
                              ) {
 
         this.authenticationSuccessHandler = authenticationSuccessHandler;
@@ -69,18 +69,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         this.objectMapper = objectMapper;
         this.dataSource = dataSource;
 
-        this.userDetailsService = userDetailsService;
-        this.appUserRepo = appUserRepo;
+//        this.userDetailsService = userDetailsService;
+//        this.appUserRepo = appUserRepo;
 //    }
 //
 //    @PostConstruct
 //    public void postConstruct(){
-        AppUser appUserJanusz = new AppUser();
-        appUserJanusz.setUsername("janusz");
-        appUserJanusz.setPassword("{bcrypt}"+ new BCryptPasswordEncoder().encode("janusz"));
-        appUserJanusz.setRole("ROLE_ADMIN");
-        appUserJanusz.setEnabled(true);
-        appUserRepo.save(appUserJanusz);
+//        AppUser appUserJanusz = new AppUser();
+//        appUserJanusz.setUsername("janusz");
+//        appUserJanusz.setPassword("{bcrypt}"+ new BCryptPasswordEncoder().encode("janusz"));
+//        appUserJanusz.setRole("ROLE_ADMIN");
+//        appUserJanusz.setEnabled(true);
+//        appUserRepo.save(appUserJanusz);
     }
 
 //    @Override
@@ -140,19 +140,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder builder) throws Exception {
- //   builder.jdbcAuthentication()
-//            .withDefaultSchema()
-//            .dataSource(dataSource)
-//            .withUser("admin")
-//            .password("{bcrypt}"+ new BCryptPasswordEncoder().encode("admin"))
-//            .roles("ADMIN")
-//            .and()
-//            .dataSource(dataSource)
-//            .withUser("user")
-//            .password("{bcrypt}"+ new BCryptPasswordEncoder().encode("user"))
-//            .roles("USER");
+    builder.jdbcAuthentication()
+            .withDefaultSchema()
+            .dataSource(dataSource)
+            .withUser("admin")
+            .password("{bcrypt}"+ new BCryptPasswordEncoder().encode("admin"))
+            .roles("ADMIN")
+            .and()
+            .dataSource(dataSource)
+            .withUser("user")
+            .password("{bcrypt}"+ new BCryptPasswordEncoder().encode("user"))
+            .roles("USER");
 
-    builder.userDetailsService(userDetailsService);
+   // builder.userDetailsService(userDetailsService);
 
         }
 
