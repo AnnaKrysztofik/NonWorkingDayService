@@ -1,10 +1,11 @@
 package api.nonWorkingDays.security.service;
 
 import lombok.val;
+import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import api.nonWorkingDays.security.model.AppUser;
+import api.nonWorkingDays.security.entity.AppUser;
 import api.nonWorkingDays.security.model.RegisterToken;
 import api.nonWorkingDays.security.model.RegisterUserDto;
 import api.nonWorkingDays.security.repo.AppUserRepo;
@@ -12,7 +13,9 @@ import api.nonWorkingDays.security.repo.TokenRepo;
 
 import javax.annotation.PostConstruct;
 import javax.mail.MessagingException;
+import java.util.Arrays;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -21,23 +24,30 @@ public class UserService {
     private MailService mailService;
     private AppUserRepo appUserRepo;
     private PasswordEncoder passwordEncoder;
+    private Environment environment;
 
-    public UserService(AppUserRepo appUserRepo, PasswordEncoder passwordEncoder, TokenRepo tokenRepo, MailService mailService) {
+    public UserService(AppUserRepo appUserRepo, PasswordEncoder passwordEncoder, TokenRepo tokenRepo, MailService mailService, Environment environment) {
         this.appUserRepo = appUserRepo;
         this.passwordEncoder = passwordEncoder;
         this.tokenRepo = tokenRepo;
         this.mailService = mailService;
+        this.environment = environment;
     }
 
     @PostConstruct
     public void postConstruct()
     {
+        if(!Arrays.stream(environment.getActiveProfiles()).collect(Collectors.toList()).contains("local"))
+            return;
+
         val appUserJanusz = new AppUser();
+
         appUserJanusz.setId(UUID.randomUUID().toString());
         appUserJanusz.setUsername("janusz");
         appUserJanusz.setPassword(new BCryptPasswordEncoder().encode("janusz"));
         appUserJanusz.setRole("ROLE_ADMIN");
         appUserJanusz.setEnabled(true);
+
         appUserRepo.save(appUserJanusz);
     }
 

@@ -1,5 +1,6 @@
 package api.nonWorkingDays.security.model;
 
+import api.nonWorkingDays.security.entity.AppUser;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

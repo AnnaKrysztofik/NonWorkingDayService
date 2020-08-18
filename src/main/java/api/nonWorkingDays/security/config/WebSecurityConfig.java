@@ -1,8 +1,6 @@
 package api.nonWorkingDays.security.config;
 
 import api.nonWorkingDays.security.jwt.JwtRequestFilter;
-import api.nonWorkingDays.security.model.AppUser;
-import api.nonWorkingDays.security.repo.AppUserRepo;
 import api.nonWorkingDays.security.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -51,7 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/swagger-resources/**").permitAll()
                     .antMatchers("/h2-console/**").permitAll()
                     .antMatchers("/token", "/register", "/login").permitAll()
-                    .antMatchers("/add", "/delete").hasRole("USER")
+                    .antMatchers("/add", "/delete").authenticated()//.hasRole("USER")
                     .antMatchers("/between", "/all").authenticated()
                     .anyRequest().authenticated()
                 .and()
