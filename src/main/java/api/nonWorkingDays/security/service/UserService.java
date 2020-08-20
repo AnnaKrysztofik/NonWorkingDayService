@@ -59,7 +59,7 @@ public class UserService {
         appUser.setId(userId);
         appUser.setUsername(regUser.getEmail());
         appUser.setPassword(passwordEncoder.encode(regUser.getPassword()));
-        appUser.setRole("USER");
+        appUser.setRole("ROLE_USER");
 
         appUserRepo.save(appUser);
 
