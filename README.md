@@ -58,11 +58,11 @@ Authorized user can searching these days by provide year using the endpoint  "/y
 ```
 
 Admin can adding and deleting items by  endpoints "/add" and "/delete", for example:
-
-[POST] /add
+```apib
+# POST /add
 
 Body:
-```apib
+
  {
         "date": "2021-01-01",
         "description": "Nowy_Rok",
