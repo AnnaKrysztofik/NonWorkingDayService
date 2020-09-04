@@ -3,7 +3,7 @@ package api.nonWorkingDays.security.model;
 import lombok.Data;
 
 @Data
-public class LoginCredentials {
+public class LoginRequest {
     private String username;
     private String password;
 }

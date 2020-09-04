@@ -1,17 +1,21 @@
 package api.nonWorkingDays.security.service;
 
 import lombok.val;
+import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import api.nonWorkingDays.security.model.AppUser;
-import api.nonWorkingDays.security.model.LoginUserDto;
+import api.nonWorkingDays.security.entity.AppUser;
 import api.nonWorkingDays.security.model.RegisterToken;
 import api.nonWorkingDays.security.model.RegisterUserDto;
 import api.nonWorkingDays.security.repo.AppUserRepo;
 import api.nonWorkingDays.security.repo.TokenRepo;
+
+import javax.annotation.PostConstruct;
 import javax.mail.MessagingException;
+import java.util.Arrays;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -19,13 +23,32 @@ public class UserService {
     private TokenRepo tokenRepo;
     private MailService mailService;
     private AppUserRepo appUserRepo;
- //   private PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
+    private Environment environment;
 
-    public UserService(AppUserRepo appUserRepo, /*PasswordEncoder passwordEncoder,*/ TokenRepo tokenRepo, MailService mailService) {
+    public UserService(AppUserRepo appUserRepo, PasswordEncoder passwordEncoder, TokenRepo tokenRepo, MailService mailService, Environment environment) {
         this.appUserRepo = appUserRepo;
-   //     this.passwordEncoder = passwordEncoder;
+        this.passwordEncoder = passwordEncoder;
         this.tokenRepo = tokenRepo;
         this.mailService = mailService;
+        this.environment = environment;
+    }
+
+    @PostConstruct
+    public void postConstruct()
+    {
+        if(!Arrays.stream(environment.getActiveProfiles()).collect(Collectors.toList()).contains("local"))
+            return;
+
+        val appUserJanusz = new AppUser();
+
+        appUserJanusz.setId(UUID.randomUUID().toString());
+        appUserJanusz.setUsername("janusz");
+        appUserJanusz.setPassword(new BCryptPasswordEncoder().encode("janusz"));
+        appUserJanusz.setRole("ROLE_ADMIN");
+        appUserJanusz.setEnabled(true);
+
+        appUserRepo.save(appUserJanusz);
     }
 
     public void registerUser(RegisterUserDto regUser) {
@@ -35,9 +58,8 @@ public class UserService {
 
         appUser.setId(userId);
         appUser.setUsername(regUser.getEmail());
-       // appUser.setPassword(passwordEncoder.encode(regUser.getPassword()));
-        appUser.setPassword("{bcrypt}"+ new BCryptPasswordEncoder().encode(regUser.getPassword()));
-        appUser.setRole("USER");
+        appUser.setPassword(passwordEncoder.encode(regUser.getPassword()));
+        appUser.setRole("ROLE_USER");
 
         appUserRepo.save(appUser);
 
@@ -61,11 +83,6 @@ public class UserService {
         }
     }
 
-    private boolean isEnabled(AppUser user){
-        return  false;
-    }
-
-
     public void enableUser(String value) {
         val byValue = tokenRepo.findByValue(value);
         val appUser = appUserRepo.findById(byValue.getUserId());
@@ -77,25 +94,5 @@ public class UserService {
 
         appUserRepo.save(appUser.get());
 
-    }
-
-    public boolean canUserLogin(LoginUserDto loginUserDto) {
-
-        val user =  appUserRepo.findByUsername(loginUserDto.getEmail());
-
-        // pobrac usera z bazy
-        if (user.isEmpty())
-            return false;
-
-        // sprawdzic czy jest enabled
-        if (!user.get().isEnabled())
-            return false;
-
-        // porownac hasla
-      //  if (!passwordEncoder.matches(loginUserDto.getPassword(), user.get().getPassword()))
-        if (!loginUserDto.getPassword().equals(user.get().getPassword()))
-          return false;
-
-        return true;
     }
 }

@@ -1,22 +1,27 @@
-package api.nonWorkingDays.security.model;
+package api.nonWorkingDays.security.entity;
 
 import lombok.Data;
+import lombok.Getter;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Data
+@Table(name="app_user")
+@Getter
 public class AppUser {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
     private String username;
     private String password;
     private String role;
     private boolean isEnabled;
+
+//    public boolean getEnabled() {
+//        return isEnabled;
+//    }
 }
