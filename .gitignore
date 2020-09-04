@@ -29,3 +29,6 @@ hs_err_pid*
 HELP.md
 mvnw
 mvnw.cmd
+
+/src/main/resources/application-local.properties
+/src/main/resources/application-sit.properties

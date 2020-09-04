@@ -24,7 +24,19 @@ User can search these days by provide year or in given period of time.
 * Lombok
 
 ## Installation
+In a new empty folder, at the terminal execute the following command to download the latest code
+```bash
+$ git clone https://github.com/AnnaKrysztofik/NonWorkingDayService.git
+```
 
+Update application-sit.properties or create a new configuration based on existed one.
+Please remember to put correct one properties for database and email configuration.
+
+In order to run the single node version you may execute the following commands:
+```bash
+$ mvn clean install
+$ java -jar web/target/nonworkingdays-0.0.1-SNAPSHOT.jar
+```
 
 ## Usage
 If you want to check non working days, you can display all calendar by  endpoint "/all" with parameter "countryCode". Code for Poland is "PL".
